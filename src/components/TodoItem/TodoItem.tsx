@@ -12,11 +12,17 @@ type Props = {
 
 export const TodoItem: React.FC<Props> = ({ title, completed, isLoading }) => {
   const [isDoubleClick, setIsDoubleClick] = useState(false);
+  // const [isChecked, setIsChecked] = useState(false);
+  const [newTitleTodo, setNewTitleTdo] = useState('');
   const refEditInput = useRef<HTMLInputElement | null>(null);
 
   const showEditForm = () => {
     setIsDoubleClick(true);
   };
+
+  useEffect(() => {
+    setNewTitleTdo(title);
+  }, [title]);
 
   useEffect(() => {
     refEditInput.current?.focus();
@@ -30,7 +36,12 @@ export const TodoItem: React.FC<Props> = ({ title, completed, isLoading }) => {
       className={classNames('todo', { completed: completed })}
     >
       <Label className="todo__status-label">
-        <Input type="checkbox" className="todo__status" dataCy="TodoStatus" />
+        <Input
+          type="checkbox"
+          className="todo__status"
+          dataCy="TodoStatus"
+          checked={completed}
+        />
       </Label>
 
       {!isDoubleClick && (
@@ -59,7 +70,8 @@ export const TodoItem: React.FC<Props> = ({ title, completed, isLoading }) => {
             className="todo__title-field"
             placeholder="Empty todo will be deleted"
             onBlur={closeEditForm}
-            value="Todo is being edited now"
+            title={newTitleTodo}
+            onChange={e => setNewTitleTdo(e.target.value)}
             ref={refEditInput}
           />
         </form>

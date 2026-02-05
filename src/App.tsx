@@ -17,8 +17,9 @@ export const App: React.FC = () => {
   const [statusTodo, setStatusTodo] = useState<Staus>('All');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [titleTodo, setTitleTodo] = useState('');
 
-  const lodingTodos = () => {
+  const loadingTodos = () => {
     setErrorMessage('');
     setIsLoading(true);
     getTodos()
@@ -32,7 +33,7 @@ export const App: React.FC = () => {
       .finally(() => setIsLoading(false));
   };
 
-  useEffect(() => lodingTodos(), []);
+  useEffect(() => loadingTodos(), []);
 
   if (!USER_ID) {
     return <UserWarning />;
@@ -71,6 +72,8 @@ export const App: React.FC = () => {
               type="text"
               className="todoapp__new-todo"
               placeholder="What needs to be done?"
+              onChange={e => setTitleTodo(e.target.value)}
+              value={titleTodo}
             />
           </form>
         </header>
@@ -90,7 +93,7 @@ export const App: React.FC = () => {
         {todos.length > 0 && (
           <footer className="todoapp__footer" data-cy="Footer">
             <span className="todo-count" data-cy="TodosCounter">
-              3 items left
+              {todos.filter(todoItem => !todoItem.completed).length} items left
             </span>
 
             {/* Active link should have the 'selected' class */}
